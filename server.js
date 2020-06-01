@@ -38,7 +38,7 @@ require('dotenv').config()
 
 // Start defining your routes here
 app.get('/', (req, res) => {
-  res.send('Hello world')
+  res.send('Hello Jennifer')
 })
 
 if (process.env.RESET_DB === "true") {
