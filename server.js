@@ -7,6 +7,26 @@ const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/users"
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true })
 mongoose.Promise = Promise
 
+const User = mongoose.model('User', {
+  name: {
+    type: String,
+    unique: true
+  },
+  password: {
+    type: String,
+    required: true
+  },
+  email: {
+    type: String,
+    required: true,
+    unique: true
+  },
+  accessToken: {
+    type: String,
+    default: () => crypto.randomBytes(128).toString('hex')
+  }
+})
+
 //   PORT=9000 npm start
 const port = process.env.PORT || 8080
 const app = express()
