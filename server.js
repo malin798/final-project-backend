@@ -83,7 +83,6 @@ app.post('/sessions', async (req, res) => {
   } catch (err) {
     res.status(404).json({  notFound: true })
   }
-})
 
 if (process.env.RESET_DB === "true") {
   const seedDatabase = async () => {
