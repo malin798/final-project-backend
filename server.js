@@ -7,7 +7,7 @@ import { User } from './Models'
 
 require('dotenv').config()
 
-const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/users"
+const mongoUrl = process.env.MONGO_URL || "mongodb://localhost/final-project-users"
 mongoose.connect(mongoUrl, { useNewUrlParser: true, useUnifiedTopology: true })
 mongoose.Promise = Promise
 
@@ -46,10 +46,11 @@ app.post('/users', async (req, res) => {
     if (duplicateUser) {
       throw {code: 11000}
     }
-
-    const user = new User({name, email, password: bcrypt.hashSync(password)})
+    
+    const hash = bcrypt.hashSync(password, 10);
+    const user = new User({name, email, password: hash})
     const saved = await user.save()
-
+    
     res.status(201).json({userId: saved._id, accessToken: saved.accessToken})
   } catch (err) {
     switch (err.code) {
