@@ -16,8 +16,13 @@ export const User = mongoose.model('User', {
     type: String,
     required: true
   },
+  watchlist: {
+    type: Array
+  },
   accessToken: {
     type: String,
     default: () => crypto.randomBytes(128).toString('hex')
   }
 })
+
+

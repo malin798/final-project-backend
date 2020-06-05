@@ -70,6 +70,28 @@ app.post('/users/:id', async (req, res) => {
   res.status(201).json({ name: req.user.name, userId: req.user._id, authorized: true})
 })
 
+app.put('/users/:userId/watchlist', authenticateUser)
+app.put('/users/:userId/watchlist', async (req, res) => {
+  try {
+    const { userId } = req.params
+    const { title, showId } = req.body
+
+    const duplicateShow = await User.findOne({ _id: userId,  "watchlist.showId" : showId })
+       
+    if (duplicateShow) {
+      throw 'Show already added!'
+    }
+
+    const showItem = { "title": title, "showId": showId }
+
+    await User.updateOne({ _id: userId}, {$push: { watchlist: showItem }})
+
+    res.status(200).json({ message: "Watchlist updated! "})
+  } catch (err) {
+    res.status(201).json({ message: "Could not update watchlist!", errors: err})
+  }
+})
+
 app.post('/sessions', async (req, res) => {
   try {
     const { name, password } = req.body
