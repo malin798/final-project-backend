@@ -112,9 +112,11 @@ app.delete('/users/:userId/watchlist', async (req, res) => {
 
     const user = await User.updateOne({ _id: userId }, { $pull: { watchlist: { showId: showId } } })
 
-    res.status(200).json({ message: `Show with id ${showId} was removed from the list` })
+    const updatedUser = await User.findOne({ _id: userId })
+
+    res.status(200).json({ watchlist: updatedUser.watchlist })
   } catch {
-    res.status(400).json({ message: `Show with id ${showId} could not be removed` })
+    res.status(400).json({ message: `Show could not be removed` })
   }
 
 })
