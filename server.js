@@ -94,11 +94,29 @@ app.put('/users/:userId/watchlist', async (req, res) => {
 
 app.get('/users/:userId/watchlist', authenticateUser)
 app.get('/users/:userId/watchlist', async (req, res) => {
+  try {
   const { userId } = req.params
-
   const user = await User.findOne({ _id: userId })
 
   res.status(200).json({ watchlist: user.watchlist })
+} catch {
+  res.status(400).json({ message: "Something went wrong, could not fetch watchlist!" })
+  }
+})
+
+app.delete('/users/:userId/watchlist', authenticateUser)
+app.delete('/users/:userId/watchlist', async (req, res) => {
+  try {
+  const { showId } = req.body
+  const { userId } = req.params
+  
+  const user = await User.updateOne({ _id: userId }, { $pull: { watchlist: {showId: showId } }})
+  
+  res.status(200).json({ message: `Show with id ${showId} was removed from the list` })
+  } catch {
+    res.status(400).json({ message: `Show with id ${showId} could not be removed` })
+  }
+  
 })
 
 app.post('/sessions', async (req, res) => {
