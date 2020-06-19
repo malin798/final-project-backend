@@ -74,7 +74,7 @@ app.put('/users/:userId/watchlist', authenticateUser)
 app.put('/users/:userId/watchlist', async (req, res) => {
   try {
     const { userId } = req.params
-    const { title, showId, poster, cast } = req.body
+    const { title, showId, poster, overview, year } = req.body
 
     const duplicateShow = await User.findOne({ _id: userId, "watchlist.showId": showId })
 
@@ -82,7 +82,7 @@ app.put('/users/:userId/watchlist', async (req, res) => {
       throw 'Show already added!'
     }
 
-    const showItem = { "title": title, "showId": showId, "poster": poster, "cast": cast }
+    const showItem = { "title": title, "showId": showId, "poster": poster, "overview": overview, "year": year }
 
     await User.updateOne({ _id: userId }, { $push: { watchlist: showItem } })
 
